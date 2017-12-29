@@ -1,0 +1,17 @@
+
+@startuml
+
+actor User
+participant "Any REST API"
+DiffDetector->"Any REST API" : Poll
+...
+"Client 1 [py]"->DiffDetector : Subscribe "/node/1"
+"Client 2 [go]"->DiffDetector : Subscribe "/node/2
+collections "Client n [..]"
+"Client n [..]"->DiffDetector : Subscribe "/node/1","/node/n"
+...
+DiffDetector->"Any REST API" : Poll
+User->"Any REST API" : Update "/node/2"
+DiffDetector->"Any REST API" : Poll
+DiffDetector->"Client 2 [go]": Notification "/node/2" update
+@enduml
