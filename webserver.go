@@ -17,13 +17,21 @@ type jsonObj struct {
 	Text string
 }
 
-func main() {
+func startHTTPServer() *http.Server {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/json", JSONPage)
 	router.HandleFunc("/todos/{todoID}", TodoShow)
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	srv := &http.Server{Handler: router, Addr: ":8080"}
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil {
+			log.Printf("HTTPServer: ListenAndServe() error: %s", err)
+		}
+	}()
+
+	return srv
 }
 
 func RandomText(texts []string) string {
@@ -38,6 +46,8 @@ func JSONPage(w http.ResponseWriter, r *http.Request) {
 	var data []byte
 
 	var jsonBlob jsonObj
+
+	// TODO: nicer way to write?
 	if _, exists := r.URL.Query()["random"]; exists {
 		jsonBlob = jsonObj{
 			RandomText([]string{"Magnus", "Bjorn", "Someone", "No one"}),
@@ -49,6 +59,7 @@ func JSONPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check if prettyprint parameter is set
+	// TODO: nicer way to write this?
 	if _, exists := r.URL.Query()["pretty"]; exists {
 		data, err = json.MarshalIndent(jsonBlob, "", "  ")
 	} else if _, exists := r.URL.Query()["prettyprint"]; exists {
