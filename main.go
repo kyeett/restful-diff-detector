@@ -17,7 +17,7 @@ var format = logging.MustStringFormatter(
 	`%{color}%{time:15:04:05.000} %{shortfunc} - %{level:.4s} %{id:03x}%{color:reset} %{message}`,
 )
 
-var logDebug bool = true
+var logDebug = true
 
 func stringAreEqual(text1, text2 string) bool {
 	dmp := diffmatchpatch.New()

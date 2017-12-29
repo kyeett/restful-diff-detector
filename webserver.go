@@ -25,19 +25,28 @@ func Users(w http.ResponseWriter, r *http.Request) {
 	var data []byte
 	var user jsonObj
 
+	// Change the
+	keys, ok := r.URL.Query()["diff"]
+	var ageDiff int
+	var nameDiff string
+
+	if !ok || len(keys) < 1 {
+	} else {
+		ageDiff = 10
+		nameDiff = "man"
+	}
+
 	// Todo: use slices instead?
 	switch ID {
 
 	case "0":
-		user = jsonObj{"Magnus", 30, "Human", "Static as it gets"}
+		user = jsonObj{"Bjorn" + nameDiff, (33 + ageDiff), "Elf", "Locked out"}
 	case "1":
-		user = jsonObj{"Bjorn", 33, "Elf", "Locked out"}
+		user = jsonObj{"No one" + nameDiff, (109 + ageDiff), "God", "Not feeling well"}
 	case "2":
-		user = jsonObj{"Someone", 10, "Orc", "Food poisoning"}
-	case "3":
-		user = jsonObj{"No one", 109, "God", "Not feeling well"}
+		user = jsonObj{"Someone" + nameDiff, (10 + ageDiff), "Orc", "Food poisoning"}
 	default:
-		user = jsonObj{"X", 1, "-", "..."}
+		user = jsonObj{"Magnus" + nameDiff, (30 + ageDiff), "Human", "Static as it gets"}
 	}
 
 	data, err = json.MarshalIndent(user, "", "  ")
