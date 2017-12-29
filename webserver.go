@@ -17,10 +17,41 @@ type jsonObj struct {
 	Text string
 }
 
+func Users(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	ID := vars["ID"]
+
+	var err error
+	var data []byte
+	var user jsonObj
+
+	// Todo: use slices instead?
+	switch ID {
+
+	case "0":
+		user = jsonObj{"Magnus", 30, "Human", "Static as it gets"}
+	case "1":
+		user = jsonObj{"Bjorn", 33, "Elf", "Locked out"}
+	case "2":
+		user = jsonObj{"Someone", 10, "Orc", "Food poisoning"}
+	case "3":
+		user = jsonObj{"No one", 109, "God", "Not feeling well"}
+	default:
+		user = jsonObj{"X", 1, "-", "..."}
+	}
+
+	data, err = json.MarshalIndent(user, "", "  ")
+	if err != nil {
+		return
+	}
+	fmt.Fprintf(w, "%s", data)
+}
+
 func startHTTPServer() *http.Server {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/json", JSONPage)
+	router.HandleFunc("/user/{ID}", Users)
 	router.HandleFunc("/todos/{todoID}", TodoShow)
 
 	srv := &http.Server{Handler: router, Addr: ":8080"}

@@ -2,6 +2,8 @@ package main
 
 import (
 	"github.com/op/go-logging"
+	"github.com/sergi/go-diff/diffmatchpatch"
+
 	"os"
 	"time"
 )
@@ -14,6 +16,19 @@ var logger = logging.MustGetLogger("example")
 var format = logging.MustStringFormatter(
 	`%{color}%{time:15:04:05.000} %{shortfunc} - %{level:.4s} %{id:03x}%{color:reset} %{message}`,
 )
+
+var logDebug bool = true
+
+func stringAreEqual(text1, text2 string) bool {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(text1, text2, false)
+
+	if logDebug == true {
+		logger.Debug("Result of comparision: ", dmp.DiffPrettyText(diffs))
+	}
+
+	return dmp.DiffLevenshtein(diffs) == 0
+}
 
 func main() {
 	// Set up logging
