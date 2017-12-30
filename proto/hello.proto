@@ -30,7 +30,11 @@ service Greeter {
 service DiffSubscriber {
   // Sends a greeting
   rpc Subscribe (DiffSubscribe) returns (DiffNotification) {}
+
+  // Sends a greeting
+  rpc SubscribeStream (DiffSubscribe) returns (stream DiffNotification) {}
 }
+
 
 // The request message containing the user's name.
 message HelloRequest {

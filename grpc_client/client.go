@@ -16,13 +16,14 @@
  *
  */
 
-package client
+package main
 
 import (
 	"fmt"
 	pb "github.com/kyeett/restful-diff-detector/proto"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"io"
 	"log"
 	"os"
 	"time"
@@ -32,6 +33,34 @@ const (
 	address     = "localhost:50051"
 	defaultName = "world"
 )
+
+func makeFlow() {
+
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	client := pb.NewDiffSubscriberClient(conn)
+	req := &pb.DiffSubscribe{Path: "/user/1"}
+	stream, err := client.SubscribeStream(context.Background(), req)
+
+	if err != nil {
+		log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
+	}
+	for {
+		feature, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
+		}
+		log.Println(feature)
+	}
+
+}
 
 func makeCall(ch chan string) {
 	start := time.Now()
@@ -74,5 +103,6 @@ func clientMain() {
 }
 
 func main() {
-	clientMain()
+	makeFlow()
+	//clientMain()
 }

@@ -18,7 +18,7 @@
 
 //go:generate protoc -I ../helloworld --go_out=plugins=grpc:../helloworld ../helloworld/helloworld.proto
 
-package grpcserver
+package main
 
 import (
 	"fmt"
@@ -50,13 +50,25 @@ func (s *Server) Subscribe(ctx context.Context, in *pb.DiffSubscribe) (*pb.DiffN
 	return &pb.DiffNotification{ResponseData: "Hello hello, " + in.Path}, nil
 }
 
+// ListFeatures lists all features contained within the given bounding Rectangle.
+func (s *Server) SubscribeStream(in *pb.DiffSubscribe, stream pb.DiffSubscriber_SubscribeStreamServer) error {
+
+	for i := 0; i < 5; i++ {
+		if err := stream.Send(&pb.DiffNotification{ResponseData: "Hello hello, " + in.Path}); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func serverMain() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	pb.RegisterGreeterServer(s, &Server{})
+	//pb.RegisterGreeterServer(s, &Server{})
+	pb.RegisterDiffSubscriberServer(s, &Server{})
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
