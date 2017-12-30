@@ -16,9 +16,7 @@
  *
  */
 
-//go:generate protoc -I ../helloworld --go_out=plugins=grpc:../helloworld ../helloworld/helloworld.proto
-
-package main
+package grpcserver
 
 import (
 	"fmt"
@@ -26,6 +24,7 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"time"
 	// pb "google.golang.org/grpc/examples/helloworld/helloworld"
 	pb "github.com/kyeett/restful-diff-detector/proto"
 	"google.golang.org/grpc/reflection"
@@ -53,15 +52,20 @@ func (s *Server) Subscribe(ctx context.Context, in *pb.DiffSubscribe) (*pb.DiffN
 // ListFeatures lists all features contained within the given bounding Rectangle.
 func (s *Server) SubscribeStream(in *pb.DiffSubscribe, stream pb.DiffSubscriber_SubscribeStreamServer) error {
 
-	for i := 0; i < 5; i++ {
+	ticker := time.NewTicker(1 * time.Second)
+	for range ticker.C {
+
 		if err := stream.Send(&pb.DiffNotification{ResponseData: "Hello hello, " + in.Path}); err != nil {
 			return err
 		}
+		fmt.Println("Sending message to client")
+		time.Sleep(200 * time.Millisecond)
+
 	}
 	return nil
 }
 
-func serverMain() {
+func ServerMain() {
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -77,5 +81,5 @@ func serverMain() {
 }
 
 func main() {
-	serverMain()
+	ServerMain()
 }

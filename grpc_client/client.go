@@ -16,7 +16,7 @@
  *
  */
 
-package main
+package grpcclient
 
 import (
 	"fmt"
@@ -34,7 +34,7 @@ const (
 	defaultName = "world"
 )
 
-func makeFlow() {
+func MakeFlow() {
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
@@ -103,6 +103,6 @@ func clientMain() {
 }
 
 func main() {
-	makeFlow()
+	MakeFlow()
 	//clientMain()
 }

@@ -21,7 +21,7 @@ func TestDiffBasic(t *testing.T) {
 func TestDiffHTTP(t *testing.T) {
 	handler := http.HandlerFunc(Users)
 	userOne := getStringFromHandler(handler, "/user/1")
-	userOneDiff := getStringFromHandler(handler, "/user/1?diff=10")
+	userOneDiff := getStringFromHandler(handler, "/user/1?diff=11")
 	userOneAgain := getStringFromHandler(handler, "/user/1")
 
 	// Slightly different texts
@@ -53,6 +53,5 @@ func getStringFromHandler(handler http.Handler, urlString string) string {
 	if status := rr.Code; status != http.StatusOK {
 		return "failed" //TODO: learn how to handle error in help methods
 	}
-
 	return rr.Body.String()
 }

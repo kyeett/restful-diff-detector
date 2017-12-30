@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/op/go-logging"
 	"github.com/sergi/go-diff/diffmatchpatch"
-
 	"os"
 	"time"
 )
@@ -30,7 +29,36 @@ func stringAreEqual(text1, text2 string) bool {
 	return dmp.DiffLevenshtein(diffs) == 0
 }
 
+func poll(period int, timeout int, f func()) {
+
+	ticker := time.NewTicker(time.Duration(period) * time.Second)
+	timer := time.After(time.Duration(timeout) * time.Second)
+
+	// quit := make(chan struct{})
+
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+
+				// Do stuff
+				f()
+
+			case <-timer:
+				ticker.Stop()
+				return
+			}
+		}
+
+	}()
+}
+
 func main() {
+
+	poll(1, 5, func() {
+		log.Error("Do work")
+	})
+
 	// Set up logging
 	backend := logging.NewLogBackend(os.Stderr, "", 0)
 	backendFormatter := logging.NewBackendFormatter(backend, format)
@@ -39,15 +67,11 @@ func main() {
 	logging.SetBackend(backendFormatter)
 
 	logger.Info("Starting server")
-	srv := startHTTPServer()
 
 	logger.Info("Sleeping for 5 seconds")
 	time.Sleep(5 * time.Second)
 
 	logger.Warning("Shutting down server")
-	if err := srv.Shutdown(nil); err != nil {
-		panic(err)
-	}
 
 	logger.Warning("Server shut down")
 }

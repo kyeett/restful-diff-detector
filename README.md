@@ -15,16 +15,25 @@ An application that polls any REST interface and allows other applications to su
 ![alt text](sequence.png "Example of sequence")
 
 # Features
-1. Serve gRPC interface to clients
 1. Polling of REST interface
-5. Create example client in Go
 4. Create subscription for path in REST
+5. ~~Create example client in Go~~
 2. ~~Diff result from REST interface~~
+1. ~~Serve gRPC interface to clients~~
 
 ## Maybes
 6. Use this lib for generating JSON patches instead of changes. http://jsonpatch.com/
 
 # Lessons learnt (not related to application)
+
+### Do something every X seconds
+```
+ticker := time.NewTicker(1 * time.Second)
+for range ticker.C {
+    // Do stuff
+}
+```
+
 ### Install
 go get -u github.com/golang/lint/golint
 
