@@ -31,14 +31,14 @@ func TestDiffHTTP(t *testing.T) {
 	assert.True(t, stringAreEqual(userOne, userOneAgain))
 }
 
-// Todo, should return err? Need to ask someone :-)
+// TODO, should return err? Need to ask someone :-)
 func getStringFromHandler(handler http.Handler, urlString string) string {
 
 	// req, err := http.NewRequest("GET", , url.Values{"page": {"1"}, "per_page": {"100"}})
 	req, err := http.NewRequest("GET", urlString, strings.NewReader("diff=11")) // <-- URL-encoded payload
 
 	if err != nil {
-		return "failed" //Todo: learn how to handle error in help methods
+		return "failed" //TODO: learn how to handle error in help methods
 	}
 
 	// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
@@ -51,7 +51,7 @@ func getStringFromHandler(handler http.Handler, urlString string) string {
 
 	// Check the status code is what we expect.
 	if status := rr.Code; status != http.StatusOK {
-		return "failed" //Todo: learn how to handle error in help methods
+		return "failed" //TODO: learn how to handle error in help methods
 	}
 
 	// Check the response body is what we expect.
