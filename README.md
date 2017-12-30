@@ -15,11 +15,14 @@ An application that polls any REST interface and allows other applications to su
 ![alt text](sequence.png "Example of sequence")
 
 # Features
-3. Serve gRPC interface to clients
+1. Serve gRPC interface to clients
 1. Polling of REST interface
 5. Create example client in Go
 4. Create subscription for path in REST
 2. ~~Diff result from REST interface~~
+
+## Maybes
+6. Use this lib for generating JSON patches instead of changes. http://jsonpatch.com/
 
 # Lessons learnt (not related to application)
 ### Install

@@ -47,5 +47,5 @@ func TestSubscribe(t *testing.T) {
 		t.Error("HelloTest() got unexpected error")
 	}
 
-	fmt.Printf("%v\n", resp.Message)
+	fmt.Printf("%v\n", resp.ResponseData)
 }

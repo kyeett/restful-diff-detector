@@ -47,7 +47,7 @@ func (s *Server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 // SayHello implements hello.GreeterServer
 func (s *Server) Subscribe(ctx context.Context, in *pb.DiffSubscribe) (*pb.DiffNotification, error) {
 	fmt.Printf("Received request from %v\n", in.Path)
-	return &pb.DiffNotification{ResponseData: "Hello " + in.Path}, nil
+	return &pb.DiffNotification{ResponseData: "Hello hello, " + in.Path}, nil
 }
 
 func serverMain() {

@@ -54,7 +54,5 @@ func getStringFromHandler(handler http.Handler, urlString string) string {
 		return "failed" //TODO: learn how to handle error in help methods
 	}
 
-	// Check the response body is what we expect.
-
 	return rr.Body.String()
 }
