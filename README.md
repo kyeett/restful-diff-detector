@@ -15,8 +15,12 @@ An application that polls any REST interface and allows other applications to su
 ![alt text](sequence.png "Example of sequence")
 
 # Features
+1. Update /user/ after X accesses
 1. Handle HTTP server not available (server)
 2. Handle HTTP crashing (server)
+2. Handle path doesn't exist (server)
+3. Send errors to client
+3. ~~Update webserver through web call~~
 4. ~~Create subscription for path in REST~~
 1. ~~Polling of REST interface~~
 5. ~~Create example client in Go~~

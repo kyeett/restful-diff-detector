@@ -7,6 +7,8 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"strconv"
+	"sync"
 	"time"
 )
 
@@ -17,6 +19,28 @@ type jsonObj struct {
 	Text string
 }
 
+var jsonObjSlice = []jsonObj{
+	{"Bjorn", 33, "Elf", "Locked out"},
+	{"Magnus", 30, "Human", "Static as it gets"},
+	{"No one", 109, "God", "Not feeling well"},
+	{"Someone", 10, "Orc", "Food poisoning"},
+}
+
+var mutex = &sync.Mutex{}
+
+func UpdateUsers(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	ID := vars["ID"]
+
+	mutex.Lock()
+	if i, err := strconv.Atoi(ID); err == nil && i >= 0 && i <= 3 {
+		jsonObjSlice[i].Name += "m"
+		jsonObjSlice[i].Age += 1
+	}
+	mutex.Unlock()
+	Users(w, r)
+}
+
 func Users(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	ID := vars["ID"]
@@ -25,28 +49,20 @@ func Users(w http.ResponseWriter, r *http.Request) {
 	var data []byte
 	var user jsonObj
 
-	// Change the
-	keys, ok := r.URL.Query()["diff"]
-	var ageDiff int
-	var nameDiff string
+	mutex.Lock()
+	if i, err := strconv.Atoi(ID); err == nil && i >= 0 && i <= 3 {
+		user = jsonObjSlice[i]
+	} else {
+		user = jsonObjSlice[0]
+	}
+	mutex.Unlock()
 
+	// Add diff
+	keys, ok := r.URL.Query()["diff"]
 	if !ok || len(keys) < 1 {
 	} else {
-		ageDiff = 10
-		nameDiff = "man"
-	}
-
-	// Todo: use slices instead?
-	switch ID {
-
-	case "0":
-		user = jsonObj{"Bjorn" + nameDiff, (33 + ageDiff), "Elf", "Locked out"}
-	case "1":
-		user = jsonObj{"No one" + nameDiff, (109 + ageDiff), "God", "Not feeling well"}
-	case "2":
-		user = jsonObj{"Someone" + nameDiff, (10 + ageDiff), "Orc", "Food poisoning"}
-	default:
-		user = jsonObj{"Magnus" + nameDiff, (30 + ageDiff), "Human", "Static as it gets"}
+		user.Name += "man"
+		user.Age += 10
 	}
 
 	data, err = json.MarshalIndent(user, "", "  ")
@@ -61,6 +77,7 @@ func StartHTTPServer() *http.Server {
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/json", JSONPage)
 	router.HandleFunc("/user/{ID}", Users)
+	router.HandleFunc("/age/{ID}", UpdateUsers)
 	router.HandleFunc("/todos/{todoID}", TodoShow)
 
 	srv := &http.Server{Handler: router, Addr: ":8080"}
