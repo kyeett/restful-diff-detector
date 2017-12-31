@@ -20,7 +20,7 @@ An application that polls any REST interface and allows other applications to su
 2. Handle HTTP crashing (server)
 2. Handle path doesn't exist (server)
 3. Send errors to client
-3. ~~Update webserver through web call~~
+3. ~~Update webserver through web call~
 4. ~~Create subscription for path in REST~~
 1. ~~Polling of REST interface~~
 5. ~~Create example client in Go~~
@@ -43,6 +43,12 @@ for range ticker.C {
 ### Install
 go get -u github.com/golang/lint/golint
 
+### Install Python
+```
+pip install grpcio-tools
+python -m grpc_tools.protoc -I proto --python_out=proto  --grpc_python_out=proto proto/hello.proto
+```
+
 ### Compile protobuf
 ```
 protoc --go_out=. proto/hello.proto
@@ -52,6 +58,7 @@ protoc --go_out=. proto/hello.proto
 ```
 java -jar plantuml.jar sequence.puml
 ```
+
 
 ### Project structure
 
