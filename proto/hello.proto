@@ -55,6 +55,6 @@ message DiffNotification {
 message DiffSubscribe {
   string path = 1;
   int32  period = 2;
-  string subscriberName = 3;
+  string subscriberId = 3;
 }
 

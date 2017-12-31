@@ -15,8 +15,8 @@ An application that polls any REST interface and allows other applications to su
 ![alt text](sequence.png "Example of sequence")
 
 # Features
-1. Polling of REST interface
 4. Create subscription for path in REST
+1. Polling of REST interface
 5. ~~Create example client in Go~~
 2. ~~Diff result from REST interface~~
 1. ~~Serve gRPC interface to clients~~

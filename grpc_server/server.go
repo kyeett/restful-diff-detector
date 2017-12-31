@@ -55,10 +55,10 @@ func (s *Server) SubscribeStream(in *pb.DiffSubscribe, stream pb.DiffSubscriber_
 	ticker := time.NewTicker(1 * time.Second)
 	for range ticker.C {
 
-		if err := stream.Send(&pb.DiffNotification{ResponseData: "Hello hello, " + in.Path}); err != nil {
+		if err := stream.Send(&pb.DiffNotification{ResponseData: "Hello hello, " + in.SubscriberId}); err != nil {
 			return err
 		}
-		fmt.Println("Sending message to client")
+		fmt.Println("Sending message to ", in.SubscriberId, "with information about", in.Path)
 		time.Sleep(200 * time.Millisecond)
 
 	}

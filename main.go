@@ -56,7 +56,7 @@ func poll(period int, timeout int, f func()) {
 func main() {
 
 	poll(1, 5, func() {
-		log.Error("Do work")
+		logger.Error("Do work")
 	})
 
 	// Set up logging

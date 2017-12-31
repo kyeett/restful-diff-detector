@@ -34,7 +34,7 @@ const (
 	defaultName = "world"
 )
 
-func MakeFlow() {
+func MakeFlow(id, path string) {
 
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
@@ -43,11 +43,11 @@ func MakeFlow() {
 	}
 	defer conn.Close()
 	client := pb.NewDiffSubscriberClient(conn)
-	req := &pb.DiffSubscribe{Path: "/user/1"}
+	req := &pb.DiffSubscribe{Path: path, SubscriberId: id}
 	stream, err := client.SubscribeStream(context.Background(), req)
 
 	if err != nil {
-		log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
+		log.Fatalf("Could not connect to server, err: %v", err)
 	}
 	for {
 		feature, err := stream.Recv()
@@ -103,6 +103,6 @@ func clientMain() {
 }
 
 func main() {
-	MakeFlow()
+	MakeFlow("hej", "da")
 	//clientMain()
 }
