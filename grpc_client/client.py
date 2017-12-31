@@ -24,12 +24,15 @@ def run():
             print("Response: %s" % response.responseData)
 
     except grpc.RpcError as e:
-        e.details()
         status_code = e.code()
-        status_code.name
-        status_code.value
 
-        print(status_code)
+        if e.code() == grpc.StatusCode.UNKNOWN:
+            additional_info = "Server shutdown or crashed."
+        elif e.code() == grpc.StatusCode.UNAVAILABLE:
+            additional_info = "Server probably not up."
+        else:
+            additional_info = "Unknown reason."
+        print("gRPC error '%s'. %s" % (e.details(), additional_info))
 
 if __name__ == '__main__':
     run()

@@ -77,4 +77,5 @@ java -jar plantuml.jar sequence.puml
 
 [testing a gPRC service](https://stackoverflow.com/questions/42102496/testing-a-grpc-service)
 
+[gRPC error handling](http://avi.im/grpc-errors)
 
