@@ -1,4 +1,4 @@
-package main
+package webserver
 
 import (
 	"encoding/json"
@@ -56,7 +56,7 @@ func Users(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%s", data)
 }
 
-func startHTTPServer() *http.Server {
+func StartHTTPServer() *http.Server {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/json", JSONPage)
