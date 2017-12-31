@@ -53,15 +53,20 @@ func (s *Server) Subscribe(ctx context.Context, in *pb.DiffSubscribe) (*pb.DiffN
 func (s *Server) SubscribeStream(in *pb.DiffSubscribe, stream pb.DiffSubscriber_SubscribeStreamServer) error {
 
 	fmt.Printf("Client '%v' subscribed to '%v'\n", in.SubscriberId, in.Path)
+
 	ticker := time.NewTicker(1 * time.Second)
 	for range ticker.C {
+
+		// Read data from server
+
+		// Diff with previous
+
+		// Send notification if different
 
 		if err := stream.Send(&pb.DiffNotification{ResponseData: "Hello hello, " + in.SubscriberId}); err != nil {
 			return err
 		}
 		fmt.Printf("Send update to '%v' for '%v'\n", in.SubscriberId, in.Path)
-		time.Sleep(200 * time.Millisecond)
-
 	}
 	return nil
 }

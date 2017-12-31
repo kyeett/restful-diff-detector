@@ -47,6 +47,12 @@ protoc --go_out=. proto/hello.proto
 java -jar plantuml.jar sequence.puml
 ```
 
+### Project structure
+
+[Respository structure](https://peter.bourgon.org/go-best-practices-2016/#repository-structure)
+
+[Go build template](https://github.com/thockin/go-build-template)
+
 ### References
 [5 tricks for tests in golang](https://medium.com/@matryer/5-simple-tips-and-tricks-for-writing-unit-tests-in-golang-619653f90742)
 
@@ -57,4 +63,5 @@ java -jar plantuml.jar sequence.puml
 [go: how to shutdown http server](https://stackoverflow.com/questions/39320025/how-to-stop-http-listenandserve)
 
 [testing a gPRC service](https://stackoverflow.com/questions/42102496/testing-a-grpc-service)
+
 
