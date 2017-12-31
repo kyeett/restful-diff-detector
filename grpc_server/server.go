@@ -52,13 +52,14 @@ func (s *Server) Subscribe(ctx context.Context, in *pb.DiffSubscribe) (*pb.DiffN
 // ListFeatures lists all features contained within the given bounding Rectangle.
 func (s *Server) SubscribeStream(in *pb.DiffSubscribe, stream pb.DiffSubscriber_SubscribeStreamServer) error {
 
+	fmt.Printf("Client '%v' subscribed to '%v'\n", in.SubscriberId, in.Path)
 	ticker := time.NewTicker(1 * time.Second)
 	for range ticker.C {
 
 		if err := stream.Send(&pb.DiffNotification{ResponseData: "Hello hello, " + in.SubscriberId}); err != nil {
 			return err
 		}
-		fmt.Println("Sending message to ", in.SubscriberId, "with information about", in.Path)
+		fmt.Printf("Send update to '%v' for '%v'\n", in.SubscriberId, in.Path)
 		time.Sleep(200 * time.Millisecond)
 
 	}

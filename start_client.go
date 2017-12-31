@@ -15,8 +15,11 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Println(*idPtr)
-	fmt.Println(*pathPtr)
+	fmt.Println("")
+	fmt.Println("Starting client")
+	fmt.Println("Client ID:\t", *idPtr)
+	fmt.Println("Client path:\t", *pathPtr)
+	fmt.Println("")
 
 	grpcclient.MakeFlow(*idPtr, *pathPtr)
 }
