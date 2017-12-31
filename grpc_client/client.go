@@ -50,14 +50,14 @@ func MakeFlow(id, path string) {
 		log.Fatalf("Could not connect to server, err: %v", err)
 	}
 	for {
-		feature, err := stream.Recv()
+		response, err := stream.Recv()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
 			log.Fatalf("%v.ListFeatures(_) = _, %v", client, err)
 		}
-		log.Println(feature)
+		log.Println(response.ResponseData)
 	}
 
 }

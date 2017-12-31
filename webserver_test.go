@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/kyeett/restful-diff-detector/webserver"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
@@ -19,7 +20,7 @@ func TestDiffBasic(t *testing.T) {
 }
 
 func TestDiffHTTP(t *testing.T) {
-	handler := http.HandlerFunc(Users)
+	handler := http.HandlerFunc(webserver.Users)
 	userOne := getStringFromHandler(handler, "/user/1")
 	userOneDiff := getStringFromHandler(handler, "/user/1?diff=11")
 	userOneAgain := getStringFromHandler(handler, "/user/1")
@@ -34,7 +35,7 @@ func TestDiffHTTP(t *testing.T) {
 // TODO, should return err? Need to ask someone :-)
 func getStringFromHandler(handler http.Handler, urlString string) string {
 
-	// req, err := http.NewRequest("GET", , url.Values{"page": {"1"}, "per_page": {"100"}})
+	// req, err :=cd . http.NewRequest("GET", , url.Values{"page": {"1"}, "per_page": {"100"}})
 	req, err := http.NewRequest("GET", urlString, strings.NewReader("diff=11")) // <-- URL-encoded payload
 
 	if err != nil {

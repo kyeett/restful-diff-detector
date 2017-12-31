@@ -22,17 +22,23 @@ import (
 	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"io/ioutil"
 	"log"
 	"net"
+	"net/http"
 	"time"
 	// pb "google.golang.org/grpc/examples/helloworld/helloworld"
 	pb "github.com/kyeett/restful-diff-detector/proto"
 	"google.golang.org/grpc/reflection"
+
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 const (
 	port = ":50051"
 )
+
+var url = "http://127.0.0.1:8080"
 
 // Server is used to implement hello.GreeterServer.
 type Server struct{}
@@ -49,24 +55,45 @@ func (s *Server) Subscribe(ctx context.Context, in *pb.DiffSubscribe) (*pb.DiffN
 	return &pb.DiffNotification{ResponseData: "Hello hello, " + in.Path}, nil
 }
 
+func stringAreEqual(text1, text2 string) bool {
+	dmp := diffmatchpatch.New()
+	diffs := dmp.DiffMain(text1, text2, false)
+
+	//fmt.Println("Result of comparision: ", dmp.DiffPrettyText(diffs))
+
+	return dmp.DiffLevenshtein(diffs) == 0
+}
+
 // ListFeatures lists all features contained within the given bounding Rectangle.
 func (s *Server) SubscribeStream(in *pb.DiffSubscribe, stream pb.DiffSubscriber_SubscribeStreamServer) error {
-
 	fmt.Printf("Client '%v' subscribed to '%v'\n", in.SubscriberId, in.Path)
+	previousText := ""
 
 	ticker := time.NewTicker(1 * time.Second)
 	for range ticker.C {
 
 		// Read data from server
+		resp, err := http.Get(url + in.Path)
+		if err != nil {
+			panic(err)
+		}
+		body, err := ioutil.ReadAll(resp.Body)
+		defer resp.Body.Close()
+		newText := string(body)
 
 		// Diff with previous
+		if !stringAreEqual(newText, previousText) {
 
-		// Send notification if different
-
-		if err := stream.Send(&pb.DiffNotification{ResponseData: "Hello hello, " + in.SubscriberId}); err != nil {
-			return err
+			// Send notification if different
+			fmt.Printf("Send update to '%v' for '%v'\n", in.SubscriberId, in.Path)
+			if err := stream.Send(&pb.DiffNotification{ResponseData: newText}); err != nil {
+				return err
+			}
+			previousText = newText
+		} else {
+			//fmt.Printf("- '%v'", in.SubscriberId)
 		}
-		fmt.Printf("Send update to '%v' for '%v'\n", in.SubscriberId, in.Path)
+
 	}
 	return nil
 }
