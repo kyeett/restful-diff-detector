@@ -11,7 +11,9 @@ import hello_pb2_grpc
 
 
 def run():
-    channel = grpc.insecure_channel('localhost:50051')
+    options = [('grpc.max_reconnect_backoff_ms', 5000)]
+    channel = grpc.insecure_channel('localhost:50051', options=options)
+
     stub = hello_pb2_grpc.DiffSubscriberStub(channel)
 
     subscribeMessage = hello_pb2.DiffSubscribe(
@@ -19,20 +21,31 @@ def run():
         period=1,
         subscriberId="orm")
 
-    try:
-        for response in stub.SubscribeStream(subscribeMessage):
-            print("Response: %s" % response.responseData)
+    while(True):
+        start = time.time()
 
-    except grpc.RpcError as e:
-        status_code = e.code()
+        try:
+            for notification in stub.SubscribeStream(subscribeMessage):
+                print("Received a notification: %s" % notification.responseData)
 
-        if e.code() == grpc.StatusCode.UNKNOWN:
-            additional_info = "Server shutdown or crashed."
-        elif e.code() == grpc.StatusCode.UNAVAILABLE:
-            additional_info = "Server probably not up."
-        else:
-            additional_info = "Unknown reason."
-        print("gRPC error '%s'. %s" % (e.details(), additional_info))
+        except grpc.RpcError as e:
+            if e.code() == grpc.StatusCode.UNAVAILABLE:
+                additional_info = "Server probably not up. "
+            elif e.code() == grpc.StatusCode.UNKNOWN:
+                additional_info = "Server shutdown or crashed. "
+            else:
+                additional_info = "Unknown reason. "
+            print("gRPC error '%s'. %s" % (e.details(), additional_info), end='', flush=True)
+
+        print("Sleep for 1 second then reconnect")
+        time.sleep(1)
+
+        done = time.time()
+        elapsed = done - start
+        print("Elapsed time", elapsed)
+
+        grpc
+
 
 if __name__ == '__main__':
     run()
