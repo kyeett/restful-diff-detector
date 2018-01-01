@@ -15,7 +15,14 @@ An application that polls any REST interface and allows other applications to su
 ![alt text](sequence.png "Example of sequence")
 
 # Features
-1. Update /user/ after X accesses
+5. IP addr as input to webserver
+6. Run webserver in docker
+1. Make 'make container' build work
+2. Make 'make push' work
+2. Run tests in travis-ci
+3. Port as input to client
+3. Port as input to server
+4. Update /user/ after X accesses
 1. Handle HTTP server not available (server)
 2. Handle HTTP crashing (server)
 2. Handle path doesn't exist (server)
@@ -28,7 +35,8 @@ An application that polls any REST interface and allows other applications to su
 1. ~~Serve gRPC interface to clients~~
 
 ## Maybes
-6. Use this lib for generating JSON patches instead of changes. http://jsonpatch.com/
+6. Debian package per application
+4. Use this lib for generating JSON patches instead of changes. http://jsonpatch.com/
 
 # Lessons learnt (not related to application)
 
@@ -80,4 +88,5 @@ java -jar plantuml.jar sequence.puml
 [gRPC error handling](http://avi.im/grpc-errors)
 
 [Setting backoff parameters in gPRC](https://github.com/grpc/grpc/issues/11277)
+
 
