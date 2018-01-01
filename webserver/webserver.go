@@ -80,7 +80,7 @@ func StartHTTPServer() *http.Server {
 	router.HandleFunc("/age/{ID}", UpdateUsers)
 	router.HandleFunc("/todos/{todoID}", TodoShow)
 
-	srv := &http.Server{Handler: router, Addr: ":8080"}
+	srv := &http.Server{Handler: router, Addr: "127.0.0.1:8080"}
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {

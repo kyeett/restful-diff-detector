@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/kyeett/restful-diff-detector/grpc_client"
+	"github.com/kyeett/restful-diff-detector/grpcclient"
 	"github.com/satori/go.uuid"
 )
 

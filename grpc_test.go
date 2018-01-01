@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/kyeett/restful-diff-detector/grpc_server"
+	"github.com/kyeett/restful-diff-detector/grpcserver"
 	pb "github.com/kyeett/restful-diff-detector/proto"
 	"testing"
 )
