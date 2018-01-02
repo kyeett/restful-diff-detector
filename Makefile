@@ -84,9 +84,21 @@ build2:
 	@echo "hello"
 	@echo "docker build --build-arg VERSION=magnus -t go-builder --no-cache ."
 	@docker build --build-arg VERSION=magnus -t go-builder --no-cache .
-	@echo "docker run -v $$(pwd)/output:/output go-builder"
+	@rm -rf bin
+	@echo "docker run -v $$(pwd)/bin:/output go-builder"
 	@docker run -v $$(pwd)/output:/output go-builder
 
+build3:
+	@echo /usr/local/go/src/$(PKG)/cmd/grpcserver
+	@rm -rf bin
+	@docker run --rm						\
+	             -v $$(pwd):/usr/local/go/src/$(PKG)/ 	\
+	             -v $$(pwd)/bin:/output 	\
+				 -w /usr/local/go/src/$(PKG) 			\
+				 -e GOOS=darwin 			\
+				 -e GOARCH=amd64 			\
+				 --entrypoint=/bin/sh 		\
+				 golang:1.8 -c 'go install -v -installsuffix "static" $(PKG)/cmd/... && echo hej && ls -laR /usr/local/go/bin && cp -R /usr/local/go/bin/* /output'
 
 build: bin/$(ARCH)/$(BIN)
 
