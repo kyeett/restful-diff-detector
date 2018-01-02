@@ -15,26 +15,37 @@ An application that polls any REST interface and allows other applications to su
 ![alt text](sequence.png "Example of sequence")
 
 # Features
-5. IP addr as input to webserver
-6. Run webserver in docker
-1. Make 'make container' build work
-2. Make 'make push' work
-2. Run tests in travis-ci
-3. Port as input to client
-3. Port as input to server
-4. Update /user/ after X accesses
-1. Handle HTTP server not available (server)
-2. Handle HTTP crashing (server)
-2. Handle path doesn't exist (server)
-3. Send errors to client
-3. ~~Update webserver through web call~
+### ~~Release 0.1~~
+1. ~~Update webserver through web call~
 4. ~~Create subscription for path in REST~~
 1. ~~Polling of REST interface~~
 5. ~~Create example client in Go~~
 2. ~~Diff result from REST interface~~
 1. ~~Serve gRPC interface to clients~~
 
-## Maybes
+### Release 0.2
+1. Use `dep`
+5. Use `multi-stage docker build`
+1. Make `make container` build work
+2. Make `make push` work
+3. Make `make deploy` work
+1. IP addr as input to webserver
+6. Run webserver in docker
+
+### Release 0.3
+1. Use some kind of versioning system 
+1. Port as input to client
+3. Port as input to server
+2. Run tests in travis-ci
+4. Update /user/ after X accesses
+1. Handle HTTP server not available (server)
+
+### Release 0.x
+1. Handle HTTP crashing (server)
+2. Handle path doesn't exist (server)
+3. Send errors to client
+
+### Unplanned
 6. Debian package per application
 4. Use this lib for generating JSON patches instead of changes. http://jsonpatch.com/
 
