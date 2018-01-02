@@ -58,7 +58,7 @@ endif
 IMAGE := $(REGISTRY)/$(BIN)-$(ARCH)
 
 # BUILD_IMAGE ?= golang:1.9-alpine
-BUILD_IMAGE ?= build-golang
+BUILD_IMAGE ?= golang-build:test2
 
 # If you want to build all binaries, see the 'all-build' rule.
 # If you want to build all containers, see the 'all-container' rule.
@@ -80,10 +80,19 @@ all-container: $(addprefix container-, $(ALL_ARCH))
 
 all-push: $(addprefix push-, $(ALL_ARCH))
 
+build2:
+	@echo "hello"
+	@echo "docker build --build-arg VERSION=magnus -t go-builder --no-cache ."
+	@docker build --build-arg VERSION=magnus -t go-builder --no-cache .
+	@echo "docker run -v $$(pwd)/output:/output go-builder"
+	@docker run -v $$(pwd)/output:/output go-builder
+
+
 build: bin/$(ARCH)/$(BIN)
 
 bin/$(ARCH)/$(BIN): build-dirs
 	@echo "building: $@"
+	@docker build -f Dockertest -t $(BUILD_IMAGE) .
 	@docker run                                                             \
 	    -ti                                                                 \
 	    --rm                                                                \

@@ -34,8 +34,6 @@ fi
 export CGO_ENABLED=0
 export GOARCH="${ARCH}"
 
-go get ./...
-
 go install                                                         \
     -installsuffix "static"                                        \
     -ldflags "-X ${PKG}/pkg/version.VERSION=${VERSION}"            \
